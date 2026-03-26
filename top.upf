@@ -1,0 +1,75 @@
+### Task 4 Step 3. Enable the design attribute to allow VCS NLP to compile deprecated PST UPF commands.
+
+ set_design_attributes -attribute enable_state_propagation_in_add_power_state TRUE -elements {.}
+
+### Task 1. 
+## specify the design top
+
+set_design_top top
+
+## Power Domain: TOP ##
+create_power_domain TOP -include_scope
+
+create_supply_port VDD -domain TOP -direction in
+create_supply_port VSS -domain TOP -direction in
+
+create_supply_net VDD -domain TOP
+create_supply_net VSS -domain TOP
+
+connect_supply_net VDD -ports VDD
+connect_supply_net VSS -ports VSS
+
+set_domain_supply_net TOP \
+	-primary_power_net VDD \
+	-primary_ground_net VSS
+
+## Power Domain: DUT ##
+create_power_domain DUT -elements {dut_i}
+
+create_supply_net VDD_dut -domain DUT 
+create_supply_net VSS -domain DUT -reuse
+
+set_domain_supply_net DUT \
+	-primary_power_net VDD_dut \
+	-primary_ground_net VSS
+
+### Task 1. Set Power Switch 
+
+create_power_switch DUT_PWR_SWITCH \
+	-domain DUT \
+	-output_supply_port "out VDD_dut" \
+	-input_supply_port "in TOP.primary.power" \
+	-control_port "ctrl tb_i/pwr_switch" \
+	-on_state "DUT_SW_ON in {ctrl}" \
+	-off_state "DUT_SW_OFF {!ctrl}" \
+
+### Task 2. Set isolation
+
+ set_isolation DUT_ISO \
+ 	-domain DUT \
+ 	-location self \
+ 	-isolation_signal tb_i/iso_control \
+ 	-isolation_sense high \
+ 	-clamp_value 0 \
+	-applies_to outputs \
+
+
+### Task 3. Set Retention (Two pins)
+
+ set_retention DUT_RET \
+ 	-domain DUT \
+   	-retention_supply_set TOP.primary \
+ 	-elements "dut_i/cnt_reg"   \
+ 	-save_signal "tb_i/ret_save high"  \
+ 	-restore_signal "tb_i/ret_restore high" 
+
+### Task 4 Step 2. Create power state table
+## Define power state for each supply set
+## create power state table
+## add the power state to the power state table
+
+ add_power_state TOP.primary \
+ 	-state HV {-supply_expr {power == `{FULL_ON, 1.2}}} \
+ 	-state GND {-supply_expr {ground == `{FULL_ON, 0.0}}}
+ create_pst snps_pst -supplies {TOP.primary.power  TOP.primary.ground}
+ add_pst_state all_on -pst snps_pst -state {HV GND}

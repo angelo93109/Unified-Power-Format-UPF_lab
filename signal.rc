@@ -1,0 +1,167 @@
+Magic 271485
+Revision Verdi_X-2025.06
+
+; Window Layout <x> <y> <width> <height> <signalwidth> <valuewidth>
+viewPort 0 11 3440 561 209 65
+
+; File list:
+; openDirFile [-d delimiter] [-s time_offset] [-rf auto_bus_rule_file] path_name file_name
+openDirFile -d / "" "/remote/us01home50/yenchieh/VCS/NLP/SNPS_AE_training_lab/power.fsdb"
+
+; file time scale:
+; fileTimeScale ### s|ms|us|ns|ps
+
+; signal spacing:
+signalSpacing 5
+
+; windowTimeUnit is used for zoom, cursor & marker
+; waveform viewport range
+zoom 32.400000 242.400000
+cursor 85.000000
+marker 0.000000
+
+; user define markers
+; userMarker time_pos marker_name color linestyle
+; visible top row signal index
+top 0
+; marker line index
+markerPos 19
+
+; logical expression list
+; addExprSig expr_name expression_string
+activeDirFile "" "/remote/us01home50/yenchieh/VCS/NLP/SNPS_AE_training_lab/power.fsdb"
+
+addExprSig -b 1 -n U \_power_off_mask_upf_simstate[31:0]  (("/top/DUT/upf_simstate[31:0]"==1))
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_driving_power_off_mask_upf_simstate[31:0]  ((((("/top/DUT/upf_simstate[31:0]"==1)))))
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_driving_power_off_mask_upf_simstate[31:0](2)  ((((("/top/TOP/upf_simstate[31:0]"==1)))))
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_toggle_mask_upf_simstate[31:0]  (("/top/DUT/upf_simstate[31:0]"==1))
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_power_off_mask_upf_simstate[31:0](2)  (("/top/TOP/upf_simstate[31:0]"==1))
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_retention_level_mask_/top/tb_i/ret_save  "/top/tb_i/ret_save"
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_retention_level_mask_/top/tb_i/ret_restore  "/top/tb_i/ret_restore"
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_retention_level_mask_/top/tb_i/ret_save(2)  ("/top/tb_i/ret_save")
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_retention_level_mask_/top/tb_i/ret_restore(2)  ("/top/tb_i/ret_restore")
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n U \_isolation_mask_iso_control  "/top/tb_i/iso_control"
+
+; logical expression list
+; addExprSig expr_name expression_string
+
+addExprSig -b 1 -n UUU \_driving_power_off_mask_upf_simstate[31:0]_upf_simstate[31:0]  (((("/top/tb_i/iso_control"==1))?((("/top/DUT/upf_simstate[31:0]"==1))\
+):(((("/top/DUT/upf_simstate[31:0]"==1))))))
+
+; event list
+; addEvent event_name event_expression
+; curEvent event_name
+
+
+
+COMPLEX_EVENT_BEGIN
+
+
+COMPLEX_EVENT_END
+
+
+
+; toolbar current search type
+; curSTATUS search_type
+curSTATUS ByChange
+
+
+addGroup "G1"
+addSubGroup "dut_i"
+activeDirFile "" "/remote/us01home50/yenchieh/VCS/NLP/SNPS_AE_training_lab/power.fsdb"
+addSignal -h 16 /top/VSS
+addSignal -h 16 /top/dut_i/clk
+addSignal -h 16 -holdScope rst_n
+addSignal -h 16 -holdScope cnt_start
+addSignal -h 16 -UNSIGNED -HEX -holdScope cnt_reg[2:0]
+addSignal -h 16 -UNSIGNED /top/DUT/upf_simstate[31:0]
+addSignal -h 16 /top/VDD_dut
+addSignal -c ID_RED6 -ls solid -lw 1 -not_apply_wf_color -h 16 /top/dut_i/cnt_done
+endSubGroup "dut_i"
+addSubGroup "Power Switch"
+addSignal -h 16 /top/DUT/DUT_PWR_SWITCH/ctrl
+addSignal -h 16 -holdScope in(power_port)
+addSignal -h 16 -holdScope out(power_port)
+addSignal -h 16 -UNSIGNED -holdScope power_switch_state[2:0]
+endSubGroup "Power Switch"
+addSubGroup "Isolation Control"
+addSignal -h 16 /top/tb_i/iso_control
+addSignal -c ID_RED6 -ls solid -lw 1 -not_apply_wf_color -h 16 /top/dut_i/cnt_done
+endSubGroup "Isolation Control"
+addSubGroup "Retention Control" -e FALSE
+endSubGroup "Retention Control"
+addSignal -h 16 /top/DUT/DUT_PWR_SWITCH/out(power_port)
+addSignal -h 16 /top/tb_i/ret_save
+addSignal -h 16 -holdScope ret_restore
+addSignal -h 16 -UNSIGNED -HEX /top/dut_i/cnt_reg[2:0]
+addGroup "G2"
+
+; getSignalForm Scope Hierarchy Status
+; active file of getSignalForm
+activeDirFile "" "/remote/us01home50/yenchieh/VCS/NLP/SNPS_AE_training_lab/power.fsdb"
+
+GETSIGNALFORM_SCOPE_HIERARCHY_BEGIN
+getSignalForm close
+
+"/_vcs_unit__325987265"
+"/top"
+"/top/DUT"
+"/top/dut_i"
+
+SCOPE_LIST_BEGIN
+"/_vcs_unit__325987265"
+"/_vcs_unit__646017999"
+"/_vcs_unit__3470185067"
+"/top"
+"/top/tb_i"
+"/top/dut_i"
+"/top/dut_i/dff_1"
+"/top/DUT"
+"/top/TOP"
+"/top/DUT/dut_ret"
+"/top/DUT/default_isolation"
+"/top/DUT/ISO_IN_CPU"
+"/top/DUT/DUT_ISO"
+"/top/DUT/DUT_RET"
+"/top/DUT/DUT_PWR_SWITCH"
+SCOPE_LIST_END
+
+GETSIGNALFORM_SCOPE_HIERARCHY_END
+
+
